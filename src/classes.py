@@ -19,7 +19,10 @@ class Product:
 
     @price.setter
     def price(self, value):
-        self.__price = value
+        if value > 0:
+            self.__price = value
+        else:
+            print("Цена не должна быть нулевая или отрицательная")
 
     @classmethod
     def new_product(cls, params):
@@ -45,8 +48,11 @@ class Category:
         Category.product_count += len(self.__products)
 
     def add_product(self, product):
-        self.__products.append(product)
-        Category.product_count += 1
+        if isinstance(product, Product):
+            self.__products.append(product)
+            Category.product_count += 1
+        else:
+            print("Можно добавлять только объекты типа Product или его наследников.")
 
 
     @property
