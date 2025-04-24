@@ -26,11 +26,18 @@ class Product:
 
     @classmethod
     def new_product(cls, params):
-        name = params.get('name')
-        description = params.get('description')
-        price = params.get('price')
-        quantity = params.get('quantity')
+        name = params.get("name")
+        description = params.get("description")
+        price = params.get("price")
+        quantity = params.get("quantity")
         return cls(name, description, price, quantity)
+
+    def __str__(self):
+        return f"{self.name}, {self.__price} руб. Остаток: {self.quantity} шт."
+
+    def __add__(self, other):
+        return (self.__price * self.quantity) + (other.__price * other.quantity)
+
 
 class Category:
     category_count = 0
@@ -54,10 +61,12 @@ class Category:
         else:
             print("Можно добавлять только объекты типа Product или его наследников.")
 
-
     @property
     def products(self):
         return self.__products
 
     def get_products(self):
         return [f"{product.name}, {product.price} руб. Остаток: {product.quantity} шт." for product in self.__products]
+
+    def __str__(self):
+        return f"{self.name}, количество продуктов: {Category.product_count} шт."

@@ -18,6 +18,15 @@ def products():
     ]
 
 
+@pytest.fixture
+def category(products):
+    return Category(
+        "Смартфоны",
+        "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
+        [products[0], products[1], products[2]],
+    )
+
+
 def test_product_initialization(products):
     product = products[0]
     assert product.name == "Samsung Galaxy S23 Ultra"
@@ -52,6 +61,7 @@ def test_category_count(products):
     Category("Телевизоры", "Описание категории", [product4])
     assert Category.category_count == 2
 
+
 def test_product_price_getter_setter():
     product = Product("Test Product", "Description", 100.0, 10)
     assert product.price == 100.0
@@ -59,19 +69,16 @@ def test_product_price_getter_setter():
     product.price = 150.0
     assert product.price == 150.0
 
+
 def test_new_product():
-    params = {
-        'name': "Test Product",
-        'description': "Description",
-        'price': 100.0,
-        'quantity': 10
-    }
+    params = {"name": "Test Product", "description": "Description", "price": 100.0, "quantity": 10}
     product = Product.new_product(params)
 
     assert product.name == "Test Product"
     assert product.description == "Description"
     assert product.price == 100.0
     assert product.quantity == 10
+
 
 def test_add_product(products):
     category = Category("Смартфоны", "Описание категории", products)
@@ -84,9 +91,11 @@ def test_add_product(products):
     assert Category.product_count == initial_product_count + 1
     assert new_product in category.products
 
+
 def test_products_property(products):
     category = Category("Смартфоны", "Описание категории", products)
     assert category.products == products
+
 
 def test_get_products(products):
     category = Category("Смартфоны", "Описание категории", products)
@@ -96,3 +105,22 @@ def test_get_products(products):
     assert products_list[0] == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
     assert products_list[1] == "Iphone 15, 210000.0 руб. Остаток: 8 шт."
     assert products_list[2] == "Xiaomi Redmi Note 11, 31000.0 руб. Остаток: 14 шт."
+
+
+def test_add_products(products):
+    result1 = products[0] + products[1]
+    result2 = products[1] + products[2]
+    assert result1 == 2580000.0
+    assert result2 == 2114000.0
+
+
+def test_str_products(products):
+    result1 = str(products[0])
+    result2 = str(products[1])
+    assert result1 == "Samsung Galaxy S23 Ultra, 180000.0 руб. Остаток: 5 шт."
+    assert result2 == "Iphone 15, 210000.0 руб. Остаток: 8 шт."
+
+
+def test_str_category(category):
+    result1 = str(category)
+    assert result1 == "Смартфоны, количество продуктов: 3 шт."
