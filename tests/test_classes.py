@@ -1,6 +1,6 @@
 import pytest
 
-from src.classes import Category, Product
+from src.classes import Category, LawnGrass, Product, Smartphone
 
 
 @pytest.fixture(autouse=True)
@@ -25,6 +25,24 @@ def category(products):
         "Смартфоны, как средство не только коммуникации, но и получения дополнительных функций для удобства жизни",
         [products[0], products[1], products[2]],
     )
+
+
+@pytest.fixture
+def grasses():
+    return [
+        LawnGrass("Газонная трава", "Элитная трава для газона", 500.0, 20, "Россия", "7 дней", "Зеленый"),
+        LawnGrass("Газонная трава 2", "Выносливая трава", 450.0, 15, "США", "5 дней", "Темно-зеленый"),
+    ]
+
+
+@pytest.fixture
+def smartphones():
+    return [
+        Smartphone(
+            "Samsung Galaxy S23 Ultra", "256GB, Серый цвет, 200MP камера", 180000.0, 5, 95.5, "S23 Ultra", 256, "Серый"
+        ),
+        Smartphone("Iphone 15", "512GB, Gray space", 210000.0, 8, 98.2, "15", 512, "Gray space"),
+    ]
 
 
 def test_product_initialization(products):
@@ -124,3 +142,18 @@ def test_str_products(products):
 def test_str_category(category):
     result1 = str(category)
     assert result1 == "Смартфоны, количество продуктов: 27 шт."
+
+
+def test_sum_lawn_grass(grasses):
+    result = grasses[0] + grasses[1]
+    assert result == 16750.0
+
+
+def test_sum_smartphones(smartphones):
+    result = smartphones[0] + smartphones[1]
+    assert result == 2580000.0
+
+
+def test_invalid_sum_smartphones_and_grasses(smartphones, grasses):
+    with pytest.raises(TypeError):
+        smartphones[0] + grasses[0]
