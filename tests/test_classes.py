@@ -157,3 +157,8 @@ def test_sum_smartphones(smartphones):
 def test_invalid_sum_smartphones_and_grasses(smartphones, grasses):
     with pytest.raises(TypeError):
         smartphones[0] + grasses[0]
+
+def test_mixin_log(capsys):
+    Product("Телевизор", "Большой телевизор", 100000, 5)
+    captured = capsys.readouterr()
+    assert "Product(Телевизор, Большой телевизор, 100000, 5)" in captured.out

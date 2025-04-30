@@ -1,4 +1,33 @@
-class Product:
+from abc import ABC, abstractmethod
+
+class BaseProduct(ABC):
+
+    @abstractmethod
+    def __init__(self, name, description, price, quantity):
+        pass
+
+    @abstractmethod
+    def price(self):
+        pass
+
+    @abstractmethod
+    def __str__(self):
+        pass
+
+    @abstractmethod
+    def __add__(self, other):
+        pass
+
+
+class MixinLog:
+    def __init__(self, *args):
+        super().__init__(*args)
+        print(repr(self))
+
+    def __repr__(self):
+        return f"{self.__class__.__name__}({self.name}, {self.description}, {self.price}, {self.quantity})"
+
+class Product(MixinLog, BaseProduct):
     name: str
     description: str
     __price: float
@@ -9,9 +38,7 @@ class Product:
         self.description = description
         self.__price = price
         self.quantity = quantity
-
-    def __repr__(self):
-        return f"{self.name}: {self.description}, Цена: {self.price}, Количество: {self.quantity}"
+        super().__init__(name, description, price, quantity)
 
     @property
     def price(self):
