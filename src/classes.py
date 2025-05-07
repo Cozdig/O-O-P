@@ -1,5 +1,6 @@
 from abc import ABC, abstractmethod
 
+
 class BaseProduct(ABC):
 
     @abstractmethod
@@ -27,6 +28,7 @@ class MixinLog:
     def __repr__(self):
         return f"{self.__class__.__name__}({self.name}, {self.description}, {self.price}, {self.quantity})"
 
+
 class Product(MixinLog, BaseProduct):
     name: str
     description: str
@@ -37,7 +39,10 @@ class Product(MixinLog, BaseProduct):
         self.name = name
         self.description = description
         self.__price = price
-        self.quantity = quantity
+        if quantity <= 0:
+            raise ValueError("Товар с нулевым количеством не может быть добавлен")
+        else:
+            self.quantity = quantity
         super().__init__(name, description, price, quantity)
 
     @property
@@ -100,6 +105,19 @@ class Category:
 
     def __str__(self):
         return f"{self.name}, количество продуктов: {(sum(p.quantity for p in self.__products))} шт."
+
+    def middle_price(self):
+        count = 0
+        price = 0
+        for product in self.__products:
+            price += product.price
+            count += 1
+        try:
+            middle = price / count
+        except ZeroDivisionError:
+            return 0
+        else:
+            return middle
 
 
 class Smartphone(Product):
